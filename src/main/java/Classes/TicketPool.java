@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TicketPool {
     private final List<String> tickets;
-    public int maxTicketCapacity;
+    public final int maxTicketCapacity;
 
     public TicketPool(int maxTicketCapacity){
         this.maxTicketCapacity = maxTicketCapacity;
@@ -22,7 +22,7 @@ public class TicketPool {
         System.out.println("Current ticket pool size: "+tickets.size());
         notifyAll();
     }
-    public synchronized String removeTicket() throws Exception{
+    public synchronized String removeTicket(String customerID) throws Exception{
         while(tickets.isEmpty()){
             System.out.println("Tickets are not available. Please wait....");
             wait();
