@@ -1,9 +1,9 @@
 package Classes;
 
 public class Vendor implements Runnable{
-    private String vendorID;
-    private TicketPool ticketPool;
-    public int releaseRate;
+    private final String vendorID;
+    private final TicketPool ticketPool;
+    public final int releaseRate;
 
     public Vendor(String vendorID, TicketPool ticketPool, int releaseRate){
         this.vendorID=vendorID;
