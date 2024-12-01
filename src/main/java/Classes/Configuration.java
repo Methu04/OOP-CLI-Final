@@ -1,5 +1,8 @@
 package Classes;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -11,74 +14,64 @@ public class Configuration {
 
     Scanner input = new Scanner(System.in);
     public void inputtotalTickets() {
-        System.out.println("Enter the total number of tickets you want to purchase: ");
-        totalTickets = input.nextInt();
+        while(true){
+            System.out.println("Enter the total number of tickets you want to purchase: ");
+            totalTickets = input.nextInt();
+            if (totalTickets>0) break;
+            System.out.println("Total tickets should be greater than zero!!!");
+        }
+
     }
     public void inputreleaseRate(){
-        System.out.println("Enter the ticket release rate: ");
-        releaseRate = input.nextInt();
+        while(true){
+            System.out.println("Enter the ticket release rate: ");
+            releaseRate = input.nextInt();
+            if (releaseRate>0) break;
+            System.out.println("Enter a value greater than zero!!!");
+        }
+
     }
     public void inputcustomerRetrievalRate(){
-        System.out.println("Enter the customer retrieval rate: ");
-        customerRetrievalRate = input.nextInt();
+        while(true){
+            System.out.println("Enter the customer retrieval rate: ");
+            customerRetrievalRate = input.nextInt();
+            if(customerRetrievalRate>0) break;
+            System.out.println("Enter a value greater than zero!!!");
+        }
+
     }
     public void inputmaxTicketCapacity(){
-        System.out.println("Enter the customer maxTicketCapacity: ");
-        maxTicketCapacity = input.nextInt();
+        while(true){
+            System.out.println("Enter the customer maxTicketCapacity: ");
+            maxTicketCapacity = input.nextInt();
+            if(maxTicketCapacity>=totalTickets) break;
+            System.out.println("Max ticket capacity must be equal or greater than total number of tickets!!!");
+        }
+
     }
 
 
-
-//
-//        System.out.println("Enter the maximum ticket capacity: ");
-//        maxTicketCapacity = input.nextInt();
-//
-//        System.out.println("Configuration setup completed.");
-//        System.out.println(this);
 
 
     public void saveToFile(String filename){
-        try(BufferedWriter write = new BufferedWriter(new FileWriter(filename))){
-            write.write("TotalTickets= "+totalTickets+"\n");
-            write.write("TicketReleaseRate= "+releaseRate+"\n");
-            write.write("CustomerRetrievalRate= "+customerRetrievalRate+"\n");
-            write.write("MaximumTicketCapacity= "+maxTicketCapacity+"\n");
-            System.out.println("Configuration saved to file: "+filename);
+        try(Writer writer = new FileWriter(filename)){
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(this,writer);
+            System.out.println("Configuration is saved to "+filename);
         }catch(IOException e){
-            System.out.println("An error occured!!!");
+            System.out.println("Error saving to file: "+e.getMessage());
         }
     }
     public static Configuration loadFile(String filename){
         Configuration config = new Configuration();
-        try(BufferedReader read = new BufferedReader(new FileReader(filename))){
-            String line;
-            while((line = read.readLine()) != null){
-                String[] parts = line.split("=");
-                if(parts.length == 2){
-                    switch(parts[0]){
-                        case "TotalTickets":
-                            config.totalTickets=Integer.parseInt(parts[1]);
-                            break;
-                        case "TicketReleaseRate":
-                            config.releaseRate=Integer.parseInt(parts[1]);
-                            break;
-                        case "CustomerRetrievalRate":
-                            config.customerRetrievalRate=Integer.parseInt(parts[1]);
-                            break;
-                        case "MaximumTicketCapacity":
-                            config.maxTicketCapacity=Integer.parseInt(parts[1]);
-                            break;
-                        default:
-                            System.out.println("Configuration parameter does not exist!!!");
-
-                    }
-                }
-            }
-            System.out.println("Configuration loaded from: "+filename);
+        try(Reader reader = new FileReader(filename)){
+            Gson gson = new Gson();
+            return gson.fromJson(reader,Configuration.class);
         }catch(IOException e){
             System.out.println("An error occured!!!");
+            System.out.println(e.getMessage());
+            return null;
         }
-        return config;
     }
 
     @Override
