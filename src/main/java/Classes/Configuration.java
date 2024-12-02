@@ -12,7 +12,8 @@ public class Configuration {
     public int customerRetrievalRate;
     public int maxTicketCapacity;
 
-    Scanner input = new Scanner(System.in);
+    private transient Scanner input = new Scanner(System.in);
+
     public void inputtotalTickets() {
         while(true){
             System.out.println("Enter the total number of tickets you want to purchase: ");
