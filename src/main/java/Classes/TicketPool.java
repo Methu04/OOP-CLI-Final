@@ -6,15 +6,20 @@ import java.util.List;
 
 public class TicketPool {
     private final List<String> tickets;
-    public final int maxTicketCapacity;
+    private final int maxCapacity;
 
-    public TicketPool(int maxTicketCapacity){
-        this.maxTicketCapacity = maxTicketCapacity;
+    public TicketPool(int maxCapacity){
+        this.maxCapacity = maxCapacity;
         this.tickets = Collections.synchronizedList(new ArrayList<>());
     }
-    public synchronized void addTickets(String[] newTickets) throws Exception{
-        if (tickets.size()+newTickets.length>maxTicketCapacity){
-            throw new Exception("Ticket pool exceeds maximum capacity.");
+    public synchronized void addTickets(String[] newTickets){
+        while (tickets.size()+newTickets.length>maxCapacity){
+            try{
+                System.out.println("Ticket pool exceeds maximum capacity.");
+                wait();
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
         }
         Collections.addAll(tickets, newTickets);
         System.out.println("Tickets are available");
@@ -22,10 +27,16 @@ public class TicketPool {
         System.out.println("Current ticket pool size: "+tickets.size());
         notifyAll();
     }
-    public synchronized String removeTicket(String customerID) throws Exception{
+    public synchronized String removeTicket(String customerID){
         while(tickets.isEmpty()){
-            System.out.println("Tickets are not available. Please wait....");
-            wait();
+            try{
+                System.out.println("Tickets are not available. Please wait....");
+                wait();
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+                return null;
+            }
+
         }
         String ticket = tickets.remove(0);
         System.out.println("Customer: "+customerID+" purchased "+ticket);
