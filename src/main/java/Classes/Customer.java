@@ -5,6 +5,7 @@ public class Customer implements Runnable{
     private final TicketPool ticketPool;
     private final int purchaseTicket;
 
+
     public Customer(String customerID, TicketPool ticketPool, int purchaseTicket){
         this.customerID=customerID;
         this.ticketPool=ticketPool;
@@ -17,17 +18,19 @@ public class Customer implements Runnable{
         try{
             while(!Thread.currentThread().isInterrupted() && ticketsPurchased<purchaseTicket){
                 String ticket = ticketPool.removeTicket(customerID);
-                System.out.println("Customer "+customerID+" purchased "+ticket);
                 if(ticket != null){
                     ticketsPurchased++;
                 }
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }
+            System.out.println("Customer "+customerID+" purchased "+ticketsPurchased);
         }catch(InterruptedException e){
             System.out.println("Customer "+customerID+" interrupted");
+            Thread.currentThread().interrupt();
         }catch(Exception e){
             System.out.println("Customer "+customerID+" error: "+e.getMessage());
         }
     }
+
 
 }
