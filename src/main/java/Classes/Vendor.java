@@ -22,13 +22,12 @@ public class Vendor implements Runnable{
                 }
                 ticketPool.addTickets(tickets);
                 System.out.println("Vendor " + vendorID + " added " + releaseRate + " tickets.");
+
                 Thread.sleep(1000);
             }
         }catch(InterruptedException e){
             System.out.println("Vendor "+vendorID+" interrupted.");
-            Thread.currentThread().interrupt();
-        }catch(Exception e){
-            System.out.println("Vendor "+vendorID+" error: "+e.getMessage());
+
         }
 
     }

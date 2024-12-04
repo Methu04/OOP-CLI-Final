@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class TicketingApp {
     public static void main(String[] args){
         Configuration config = new Configuration();
@@ -34,7 +35,7 @@ public class TicketingApp {
         }else{
             System.out.println("Invalid input. exiting...");
         }
-        TicketPool ticketPool = new TicketPool(config.maxTicketCapacity);
+        TicketPool ticketPool = new TicketPool(config.maxTicketCapacity, config.totalTickets);
         List<Thread> threads = new ArrayList<>();
 
         int noOfVendors = 10;

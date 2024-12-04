@@ -16,19 +16,18 @@ public class Customer implements Runnable{
     public void run(){
         int ticketsPurchased = 0;
         try{
-            while(!Thread.currentThread().isInterrupted() && ticketsPurchased<purchaseTicket){
+            while(ticketsPurchased<purchaseTicket){
                 String ticket = ticketPool.removeTicket(customerID);
                 if(ticket != null){
                     ticketsPurchased++;
                 }
-                Thread.sleep(500);
+                Thread.sleep(1000);
+
             }
-            System.out.println("Customer "+customerID+" purchased "+ticketsPurchased);
+
         }catch(InterruptedException e){
             System.out.println("Customer "+customerID+" interrupted");
             Thread.currentThread().interrupt();
-        }catch(Exception e){
-            System.out.println("Customer "+customerID+" error: "+e.getMessage());
         }
     }
 
