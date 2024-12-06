@@ -56,7 +56,6 @@ public class TicketingApp {
 
         threads.forEach(Thread::interrupt);
 
-
     }
 
 }

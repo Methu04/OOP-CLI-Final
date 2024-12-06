@@ -64,7 +64,7 @@ public class Configuration {
         }
     }
     public static Configuration loadFile(String filename){
-        Configuration config = new Configuration();
+        //Configuration config = new Configuration();
         try(Reader reader = new FileReader(filename)){
             Gson gson = new Gson();
             return gson.fromJson(reader,Configuration.class);
